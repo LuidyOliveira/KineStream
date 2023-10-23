@@ -4,6 +4,10 @@ import { APIKey } from "../../config/key";
 import { Container } from "./styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import Avatar from "../../assets/avatar.png";
+import NoPoster from "../../assets/no-poster.png";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function DetailsSearch() {
     const { id } = useParams();
@@ -22,7 +26,7 @@ function DetailsSearch() {
                     id,
                     title,
                     sinopse: overview,
-                    image: `${image_path}${poster_path}`,
+                    image: poster_path ? `${image_path}${poster_path}` : `${NoPoster}`,
                     releaseDate: release_date,
                     rate: vote_average.toString().substring(0, 3),
                 };
@@ -43,23 +47,27 @@ function DetailsSearch() {
     return (
         <Container>
             <div className="movie">
-                <img src={movie.image} alt={movie.sinopse} />
+                <img src={movie.image || <Skeleton />} />
                 <div className="details">
-                    <h1>{movie.title}</h1>
+                    <h1>{movie.title || <Skeleton />}</h1>
                     <span>
                         {" "}
                         <strong className="weight">Rating:</strong>{" "}
-                        <FontAwesomeIcon icon={faStar} style={{ color: "#ffff00" }} /> {movie.rate}{" "}
+                        <FontAwesomeIcon icon={faStar} style={{ color: "#ffff00" }} />{" "}
+                        {movie.rate || <Skeleton />}{" "}
                     </span>
                     <span>
                         {" "}
-                        <strong className="weight">Sinopse:</strong> {movie.sinopse}
+                        <strong className="weight">Sinopse:</strong> {movie.sinopse || <Skeleton />}
                     </span>
-                    <span className="release-date">Release date: {movie.releaseDate}</span>
+                    <span className="release-date">
+                        {movie.releaseDate ? ` Release date: ${movie.releaseDate}` : ""}
+                    </span>
 
                     <div className="cast-container">
                         <div className="cast">
-                            <h2>Cast</h2>
+                            {cast.length >= 1 ? <h2>Cast</h2> : ""}
+
                             <div className="actors-list">
                                 {cast.map((actor) => (
                                     <div key={actor.id}>
@@ -67,11 +75,13 @@ function DetailsSearch() {
                                             className="actor-image"
                                             src={
                                                 actor.profile_path
-                                                    ? `${profile}${actor.profile_path}`
-                                                    : `${profile}${movie.profile_path}`
+                                                    ? `${profile}${
+                                                          actor.profile_path || <Skeleton />
+                                                      }`
+                                                    : `${Avatar}`
                                             }
                                         />
-                                        <span className="actor">{actor.name}</span>
+                                        <span className="actor">{actor.name || <Skeleton />}</span>
                                     </div>
                                 ))}
                             </div>

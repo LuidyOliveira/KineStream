@@ -4,17 +4,21 @@ import { APIKey } from "../../config/key";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import CardSkeleton from "../CardSkeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function Home() {
     const image_path = "https://image.tmdb.org/t/p/w500";
     const [movies, setMovies] = useState([]);
     const [search, setSearch] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
         fetch(`https://api.themoviedb.org/3/movie/popular?${APIKey}&language=en-US&page=1`)
             .then((response) => response.json())
             .then((data) => setMovies(data.results));
+        setIsLoading(false);
     }, []);
 
     const [activePage, setActivePage] = useState(1);
@@ -76,6 +80,7 @@ function Home() {
                 </div>
             </div>
             <MovieList>
+                {isLoading && <CardSkeleton cards={20} />}
                 {movies.map((movie) => {
                     return (
                         <Movie key={movie.id}>

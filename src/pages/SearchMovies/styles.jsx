@@ -48,7 +48,7 @@ export const Container = styled.div`
     .back:hover {
         transform: scale(1.1);
     }
-    .loading {
+    /*.loading {
         position: fixed;
         left: 0;
         top: 10rem;
@@ -59,6 +59,7 @@ export const Container = styled.div`
         justify-content: center;
         align-items: center;
     }
+    */
 `;
 
 export const MovieList = styled.ul`

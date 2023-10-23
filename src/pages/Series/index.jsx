@@ -4,17 +4,21 @@ import { APIKey } from "../../config/key";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import CardSkeleton from "../CardSkeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
-function Home() {
+function Series() {
     const image_path = "https://image.tmdb.org/t/p/w500";
     const [series, setSeries] = useState([]);
     const [search, setSearch] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
         fetch(`https://api.themoviedb.org/3/tv/top_rated?${APIKey}&language=en-US&page=1`)
             .then((response) => response.json())
             .then((data) => setSeries(data.results));
+        setIsLoading(false);
     }, []);
 
     const [activePage, setActivePage] = useState(1);
@@ -77,6 +81,7 @@ function Home() {
                 </div>
             </div>
             <SerieList>
+                {isLoading && <CardSkeleton cards={20} />}
                 {series.map((serie) => {
                     return (
                         <Serie key={serie.id}>
@@ -92,4 +97,4 @@ function Home() {
     );
 }
 
-export default Home;
+export default Series;

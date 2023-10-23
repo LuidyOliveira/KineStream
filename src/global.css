@@ -9,10 +9,18 @@ body {
     color: white;
     padding: 2rem;
 }
-
-/*body {
-  background-color: lavenderblush;
-  color: black;
-  padding: 2rem;
+.card-skeleton {
+    display: flex;
+    width: 180px;
+    height: 270px;
+    padding: 0.5rem;
+    /* border: 1px solid grey; */
+    border-radius: 1rem;
+    margin-bottom: 2rem;
 }
-*/
+.card-skeleton .left-col {
+    margin-right: 1rem;
+}
+.card-skeleton .right-col {
+    flex: 1;
+}

@@ -48,4 +48,30 @@ export const Container = styled.div`
         opacity: 0.5;
         font-size: 127%;
     }
+    .cast-container {
+        display: flex;
+        justify-content: center;
+    }
+    .cast {
+        width: 200px;
+        padding: 1px;
+        display: grid;
+    }
+    .cast h2 {
+        margin-top: 0;
+    }
+    .actors-list {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        column-gap: 3rem;
+        row-gap: 1rem;
+        margin-top: 10px;
+    }
+    .actor {
+        margin-right: 10px;
+    }
+    .actor-image {
+        width: 100px;
+        height: 150px;
+    }
 `;

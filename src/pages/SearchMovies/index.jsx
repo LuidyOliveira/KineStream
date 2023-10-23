@@ -1,11 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Container, MovieList, Movie } from "./styles";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { APIKey } from "../../config/key";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faArrowLeftLong } from "@fortawesome/free-solid-svg-icons";
-import Loading from "../Loading";
+import NoPoster from "../../assets/no-poster.png";
+import CardSkeleton from "../CardSkeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const searchUrl = "https://api.themoviedb.org/3/search/movie";
 
@@ -14,6 +16,7 @@ const SearchMovies = () => {
 
     const [search, setSearch] = useState("");
     const [movies, setMovies] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     const query = searchParams.get("q");
 
@@ -21,6 +24,7 @@ const SearchMovies = () => {
         fetch(`${searchUrl}?${APIKey}&query=${query}`)
             .then((response) => response.json())
             .then((data) => setMovies(data.results));
+        setIsLoading(false);
     }, [query]);
 
     const inputRef = useRef(null);
@@ -37,23 +41,12 @@ const SearchMovies = () => {
 
         navigate(`/searchMovies?q=${search}`);
         setSearch("");
+        setIsLoading(false);
     };
-
-    const [loading, setLoading] = useState(false);
-
-    const location = useLocation();
-
-    useEffect(() => {
-        setLoading(true);
-
-        setTimeout(() => {
-            setLoading(false);
-        }, 500);
-    }, [location]);
 
     return (
         <Container>
-            <h1>Results for: "{query}"</h1>
+            <h1>Results for: "{query}" </h1>
             <Link to={"/"}>
                 <FontAwesomeIcon icon={faArrowLeftLong} className="back" />
             </Link>
@@ -72,18 +65,22 @@ const SearchMovies = () => {
                         onChange={(e) => setSearch(e.target.value)}
                         value={search}
                     />
-                    {loading && <Loading />}
                 </form>
             </div>
 
             {movies && movies.length === 0 && <h2>No results found</h2>}
             <MovieList>
+                {isLoading && <CardSkeleton cards={20} />}
                 {movies.map((movieSearch) => {
                     return (
                         <Movie key={movieSearch.id}>
                             <Link to={`/detailsSearch/${movieSearch.id}`}>
                                 <img
-                                    src={`https://image.tmdb.org/t/p/w500/${movieSearch.poster_path}`}
+                                    src={
+                                        movieSearch.poster_path
+                                            ? `https://image.tmdb.org/t/p/w500/${movieSearch.poster_path}`
+                                            : `${NoPoster}`
+                                    }
                                     alt={movieSearch.title}
                                 />
                             </Link>
